@@ -1,6 +1,9 @@
-FROM ruby:alpine3.6
+FROM jenkins/slave:alpine
 
-RUN apk update && apk upgrade && apk add libuv-dev wget gcc g++ clang make
+USER root
+
+RUN apk update && apk upgrade && apk add libuv-dev wget gcc g++ clang make openssh ruby bison sudo gperf
+RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 
 WORKDIR /root
 
@@ -10,3 +13,9 @@ RUN wget https://github.com/k-takata/Onigmo/releases/download/Onigmo-${ONIGMO_VE
     cd onigmo-${ONIGMO_VERSION} && \
     ./configure && \
     make -j2 install
+
+WORKDIR /home/jenkins
+
+USER jenkins
+
+RUN mkdir -p ~/.ssh; ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
