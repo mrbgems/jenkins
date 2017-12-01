@@ -2,8 +2,9 @@ FROM jenkins/slave:alpine
 
 USER root
 
-RUN apk update && apk upgrade && apk add libuv-dev wget gcc g++ clang make openssh ruby bison sudo gperf
+RUN apk update && apk upgrade && apk add libuv-dev wget gcc g++ clang make openssh ruby bison sudo gperf oniguruma-dev ccache
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+ENV PATH "/usr/lib/ccache/bin:${PATH}"
 
 WORKDIR /root
 
