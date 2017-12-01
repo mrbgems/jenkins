@@ -1,0 +1,43 @@
+version: '2'
+
+services:
+  front:
+    image: nginx:1.13-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./mounts/certs:/etc/nginx/certs
+      - ./mounts/letsencrypt:/var/www/letsencrypt
+      - ./front:/etc/nginx/conf.d
+    environment:
+      BUILDER_HOSTNAME: 103.128.221.202.static.iijgio.jp
+
+  cert:
+    build: ./cert
+    volumes:
+      - ./mounts/certs:/etc/letsencrypt
+      - ./mounts/letsencrypt:/var/www/letsencrypt
+
+  builder:
+    build: ./builder
+    image: mrbgems/mrubybuilder
+
+  slaves:
+    image: jenkinsci/jnlp-slave:3.14-1-alpine
+    environment:
+      JENKINS_URL: "http://jenkins:8080/jenkins"
+      JENKINS_SECRET: "1ddbe52d956f6224379f55d6c9f42e1669ce123ea40d66a38be3678964ad0590"
+      JENKINS_AGENT_NAME: docker-slave
+    depends_on:
+      - jenkins
+
+  jenkins:
+    build: ./jenkins
+    entrypoint: /bin/tini --
+    command: sh -c 'sudo chown jenkins:jenkins /var/run/docker.sock; /usr/local/bin/jenkins.sh'
+    environment:
+      JENKINS_OPTS: --prefix=/jenkins
+    volumes:
+      - ./mounts/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
