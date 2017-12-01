@@ -22,15 +22,7 @@ services:
   builder:
     build: ./builder
     image: mrbgems/mrubybuilder
-
-  slaves:
-    image: jenkinsci/jnlp-slave:3.14-1-alpine
-    environment:
-      JENKINS_URL: "http://jenkins:8080/jenkins"
-      JENKINS_SECRET: "1ddbe52d956f6224379f55d6c9f42e1669ce123ea40d66a38be3678964ad0590"
-      JENKINS_AGENT_NAME: docker-slave
-    depends_on:
-      - jenkins
+    command: tail -f /dev/null
 
   jenkins:
     build: ./jenkins
