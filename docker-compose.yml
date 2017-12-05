@@ -26,8 +26,9 @@ services:
 
   jenkins:
     build: ./jenkins
+    restart: always
     entrypoint: /bin/tini --
-    command: sh -c 'sudo chown jenkins:jenkins /var/run/docker.sock; /usr/local/bin/jenkins.sh'
+    command: sh -c 'sudo chown jenkins:jenkins /var/run/docker.sock; sudo redis-server /etc/redis.conf; /usr/local/bin/jenkins.sh'
     environment:
       JENKINS_OPTS: --prefix=/jenkins
     volumes:

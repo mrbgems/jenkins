@@ -1,16 +1,19 @@
-FROM jenkins/jenkins:2.92-alpine
+FROM jenkins/jenkins:2.93
 
 USER root
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.6/main" >> /etc/apk/repositories
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.6/community" >> /etc/apk/repositories
-RUN apk update && apk upgrade && \
-    apk add libuv-dev wget gcc g++ clang make openssh ruby bison sudo gperf \
-    oniguruma-dev libmaxminddb-dev mbedtls-dev pcre-dev pcre2-dev jpeg-dev openjpeg-dev linux-headers \
-    libressl-dev libnl-dev ipvsadm gmp-dev libnet-dev hiredis-dev autoconf mesa-dev libunwind-dev glib-dev perl \
-    curl-dev llvm-dev cmake sqlite-dev zstd-dev automake mpg123-dev util-linux libnfnetlink-dev \
-    imagemagick-c++ imagemagick-dev gsl-dev lua5.2-dev lz4-dev unixodbc-dev clang-dev libxml2-dev yaml-dev \
-    fltk-dev libtool flex linux-pam-dev fts-dev libsodium-dev libpcap-dev glfw-dev geoip-dev msgpack-c-dev \
-    lmdb-dev clang-static llvm-static file docker
+RUN apt update && apt upgrade -y && \
+    apt install -y \
+    wget gcc g++ clang make openssh-client ruby bison sudo gperf autoconf perl cmake automake \
+    libtool flex graphicsmagick-imagemagick-compat fts mingw-w64 wine-development win32-development \
+    libuv1-dev libonig-dev libmaxminddb-dev libmbedtls-dev libpcre2-dev libjpeg-dev linux-headers-amd64 \
+    libnl-3-dev ipvsadm libgmp-dev libnet1-dev libhiredis-dev libgles2-mesa-dev libunwind-dev \
+    libcurl4-openssl-dev llvm-dev libsqlite3-dev libzstd-dev libmpg123-dev libnfnetlink-dev \
+    libgsl-dev liblua5.2-dev liblz4-dev unixodbc-dev libmsgpack-dev libmagick++-dev libcgroup-dev \
+    libxml2-dev libyaml-dev libfltk1.3-dev libsodium-dev libpcap-dev libglfw3-dev libclang-dev \
+    libgeoip-dev liblmdb-dev docker libunbound-dev libmariadb-dev libglib2.0-dev libpam0g-dev libv8-dev \
+    libasan3 libmemcached-dev libmnl-dev libmecab-dev liblzma-dev libplplot-dev libargon2-0-dev \
+    libmagic-dev libmariadbclient-dev libssl-dev libleveldb-dev libncurses5-dev liballegro5-dev \
+    libczmq-dev chipmunk-dev
 
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 
@@ -21,6 +24,15 @@ RUN wget https://github.com/k-takata/Onigmo/releases/download/Onigmo-${ONIGMO_VE
     ./configure && \
     make -j2 install
 
+ENV LIBUV_VERSION 1.18.0
+RUN wget https://dist.libuv.org/dist/v1.18.0/libuv-v1.18.0.tar.gz && \
+    tar xf libuv-v1.18.0.tar.gz && \
+    cd libuv-v1.18.0 && \
+    ./configure && \
+    make -j2 install
+
 RUN mkdir -p ~/.ssh; ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
+RUN sudo ldconfig
 
 USER jenkins
