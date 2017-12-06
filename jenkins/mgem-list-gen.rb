@@ -64,6 +64,9 @@ cat <<EOF > "$WORKSPACE/mgem_build_config.rb"
     conf.toolchain tool
     enable_test if conf.respond_to? :enable_test
     enable_debug
+    conf.cc.command = "sccache \#{conf.cc.command}"
+    conf.cxx.command = "sccache \#{conf.cxx.command}"
+    conf.linker.command = "sccache \#{conf.cxx.command}"
     conf.cxx.flags << '-std=c++11'
     gem core: 'mruby-print'
     gem "${WORKSPACE}"
