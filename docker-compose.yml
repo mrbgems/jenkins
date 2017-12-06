@@ -2,14 +2,14 @@ version: '3'
 
 services:
   front:
-    image: nginx:1.13-alpine
+    build:
+      context: ./front
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./mounts/certs:/etc/nginx/certs
-      - ./mounts/letsencrypt:/var/www/letsencrypt
-      - ./front:/etc/nginx/conf.d
+      - certs:/etc/nginx/certs
+      - letsencrypt:/var/www/letsencrypt
     environment:
       BUILDER_HOSTNAME: 103.128.221.202.static.iijgio.jp
 
@@ -17,25 +17,23 @@ services:
     build:
       context: ./cert
     volumes:
-      - ./mounts/certs:/etc/letsencrypt
-      - ./mounts/letsencrypt:/var/www/letsencrypt
-
-  builder:
-    build:
-      context: ./builder
-    image: mrbgems/mrubybuilder
-    command: tail -f /dev/null
+      - certs:/etc/letsencrypt
+      - letsencrypt:/var/www/letsencrypt
 
   jenkins:
     build:
       context: ./jenkins
     restart: always
     entrypoint: /bin/tini --
-    command: sh -c 'sudo chown jenkins:jenkins /var/run/docker.sock; sudo redis-server /etc/redis/redis.conf; sudo redis-server --daemonize yes --port 6380 --requirepass secret; /usr/local/bin/jenkins.sh'
+    command: sh -c 'sudo redis-server /etc/redis/redis.conf; sudo redis-server --daemonize yes --port 6380 --requirepass secret; /usr/local/bin/jenkins.sh'
     environment:
       JENKINS_OPTS: --prefix=/jenkins
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     volumes:
-      - ./mounts/jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_home:/var/jenkins_home
+
+volumes:
+  jenkins_home:
+  certs:
+  letsencrypt:
