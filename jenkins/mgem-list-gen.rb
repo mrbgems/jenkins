@@ -68,6 +68,7 @@ cat <<EOF > "$WORKSPACE/mgem_build_config.rb"
     conf.cxx.command = "sccache \#{conf.cxx.command}"
     conf.linker.command = "sccache \#{conf.cxx.command}"
     conf.cxx.flags << '-std=c++11'
+    [conf.cxx, conf.cc, conf.linker].each{|c| c.flags << '-fsanitize=address,leak,undefined' }
     gem core: 'mruby-print'
     gem "${WORKSPACE}"
   end
