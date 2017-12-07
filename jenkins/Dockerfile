@@ -15,7 +15,7 @@ RUN apt update && apt upgrade -y && \
     libmagic-dev libmariadbclient-dev libssl-dev libleveldb-dev libncurses5-dev liballegro5-dev \
     libczmq-dev chipmunk-dev libjansson-dev libevent-dev libsystemd-dev libaugeas-dev \
     python-dev cython libev-dev libc-ares-dev libjemalloc-dev python-setuptools \
-    redis-server
+    redis-server gobjc
 
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 
