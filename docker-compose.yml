@@ -4,6 +4,7 @@ services:
   front:
     build:
       context: ./front
+    restart: always
     ports:
       - "80:80"
       - "443:443"
@@ -16,6 +17,7 @@ services:
   cert:
     build:
       context: ./cert
+    restart: always
     volumes:
       - certs:/etc/letsencrypt
       - letsencrypt:/var/www/letsencrypt
