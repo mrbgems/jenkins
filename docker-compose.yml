@@ -26,11 +26,12 @@ services:
     build:
       context: ./jenkins
     restart: always
+    working_dir: /var/jenkins_home
     entrypoint: /bin/tini --
-    command: bash -c 'sudo redis-server /etc/redis/redis.conf; sudo redis-server --daemonize yes --port 6380 --requirepass secret; /var/jenkins_home/.cargo/bin/sccache --start-server; /usr/local/bin/jenkins.sh'
+    command: bash -c 'sudo redis-server /etc/redis/redis.conf; sudo redis-server --daemonize yes --port 6380 --requirepass secret; /usr/local/bin/jenkins.sh'
     environment:
       JENKINS_OPTS: --prefix=/jenkins
-      SCCACHE_CACHE_SIZE: 50G
+      CCACHE_MAXSIZE: 50GB
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     volumes:
