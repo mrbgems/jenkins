@@ -33,6 +33,8 @@ MRUBY_RELEASES.each do |rel|
   if `curl -s -o /dev/null -w '%{http_code}' '#{config_url}'`.strip == '404'
     raise "cannot create job: #{rel}" unless
       system("curl -X POST -H #{crumb} -d 'name=release-downloader-#{rel}&mode=copy&from=release-downloader-master' '#{base_url}/createItem'")
+    raise "cannot enable job: #{rel}" unless
+      system("curl -X POST -H #{crumb} '#{base_url}/job/release-downloader-#{rel}/enable'")
   end
   raise "cannot update job: #{rel}" unless
     system("curl -X POST --data-binary @- -H #{crumb} -H 'Content-Type: text/xml' '#{config_url}' < ./tmp.xml")
@@ -70,6 +72,25 @@ cat <<EOF > "$WORKSPACE/mgem_build_config.rb"
     gem "${WORKSPACE}"
   end
 end
+
+=begin
+[:i686, :x86_64].each do |arch|
+  MRuby::CrossBuild.new("\#{arch}-w64-mingw32") do |conf|
+    conf.toolchain :gcc
+    enable_test if conf.respond_to? :enable_test
+    enable_debug
+    conf.cxx.flags << '-std=c++11'
+    test_runner.command = 'wine'
+
+    conf.cc.command = "ccache \#{arch}-w64-mingw32-gcc"
+    conf.cxx.command = "ccache \#{arch}-w64-mingw32-g++"
+    conf.linker.command = "ccache \#{arch}-w64-mingw32-g++"
+
+    gem core: 'mruby-print'
+    gem "${WORKSPACE}"
+  end
+end
+=end
 EOF
 
 tar xf $WORKSPACE/../release-downloader-#{rel}/mruby-#{rel}.tar.gz
@@ -83,6 +104,8 @@ EOS
     if `curl -s -o /dev/null -w '%{http_code}' '#{config_url}'`.strip == '404'
       raise "cannot create job: #{rel}-#{name}" unless
         system("curl -X POST -H #{crumb} -d 'name=#{rel}-#{name}&mode=copy&from=#{BASE_GEM}' '#{base_url}/createItem'")
+      raise "cannot enable job: #{rel}-#{name}" unless
+        system("curl -X POST -H #{crumb} '#{base_url}/job/#{rel}-#{name}/enable'")
     end
     raise "cannot update job: #{rel}-#{name}" unless
       system("curl -X POST --data-binary @- -H #{crumb} -H 'Content-Type: text/xml' '#{config_url}' < ./tmp.xml")
