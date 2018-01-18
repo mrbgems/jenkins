@@ -27,8 +27,6 @@ services:
       context: ./jenkins
     restart: always
     working_dir: /var/jenkins_home
-    entrypoint: /bin/tini --
-    command: bash -c 'sudo redis-server /etc/redis/redis.conf; sudo redis-server --daemonize yes --port 6380 --requirepass secret; /usr/local/bin/jenkins.sh'
     environment:
       JENKINS_OPTS: --prefix=/jenkins
       CCACHE_MAXSIZE: 50GB
@@ -36,6 +34,26 @@ services:
       - net.ipv6.conf.all.disable_ipv6=0
     volumes:
       - jenkins_home:/var/jenkins_home
+
+  builder:
+    build:
+      context: ./builder
+    restart: always
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    environment:
+      JENKINS_AGENT_NAME: Builder
+      JENKINS_SECRET: fd4405e69dffefd159e0b41385e9d8171ad5ef82c03baa5bc6a804560a29182a
+      JENKINS_URL: http://jenkins:8080/jenkins
+      JENKINS_WORKDIR: /home/jenkins/agent
+      CCACHE_MAXSIZE: 50GB
+    entrypoint: ''
+    command: |
+      sh -c '
+        sudo redis-server /etc/redis/redis.conf;
+        sudo redis-server --daemonize yes --port 6380 --requirepass secret;
+        jenkins-slave'
+
 
 volumes:
   jenkins_home:
