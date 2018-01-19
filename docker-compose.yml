@@ -53,9 +53,11 @@ services:
         sudo redis-server /etc/redis/redis.conf;
         sudo redis-server --daemonize yes --port 6380 --requirepass secret;
         jenkins-slave'
-
+    volumes:
+      - builder_home:/home/jenkins
 
 volumes:
   jenkins_home:
+  builder_home:
   certs:
   letsencrypt:
