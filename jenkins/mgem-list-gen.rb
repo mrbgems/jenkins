@@ -3,7 +3,7 @@ require 'rexml/document'
 require 'uri'
 
 BASE_GEM = 'master-mruby-marshal'
-MRUBY_RELEASES = %w[1.3.0 1.2.0 master]
+MRUBY_RELEASES = %w[1.4.0 1.3.0 1.2.0 master]
 
 def base_url; ENV['MGEM_LIST_UPDATER_BASE'] end
 
