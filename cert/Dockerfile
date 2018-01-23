@@ -1,4 +1,4 @@
-FROM certbot/certbot:v0.19.0
+FROM certbot/certbot:v0.21.0
 
 RUN apk update; apk upgrade; apk add dcron
 ADD certbot_renew.sh /etc/periodic/daily/
