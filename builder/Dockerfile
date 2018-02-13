@@ -8,7 +8,7 @@ RUN dpkg --add-architecture i386 && \
     echo "deb https://dl.winehq.org/wine-builds/debian/ stretch main" >> /etc/apt/sources.list && \
     apt update && apt upgrade -y && \
     apt install -y \
-    wget gcc g++ clang make openssh-client ruby bison sudo gperf autoconf perl automake \
+    wget gcc g++ clang make openssh-client ruby ruby-dev bison sudo gperf autoconf perl automake \
     libtool flex graphicsmagick-imagemagick-compat fts mingw-w64 cmake \
     libonig-dev libmaxminddb-dev libmbedtls-dev libpcre2-dev libjpeg-dev linux-headers-amd64 \
     libnl-3-dev ipvsadm libgmp-dev libnet1-dev libhiredis-dev libgles2-mesa-dev libunwind-dev \
