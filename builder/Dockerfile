@@ -32,10 +32,10 @@ RUN wget https://github.com/k-takata/Onigmo/releases/download/Onigmo-${ONIGMO_VE
     ./configure && \
     make -j2 install
 
-ENV LIBUV_VERSION 1.18.0
-RUN wget https://dist.libuv.org/dist/v1.18.0/libuv-v1.18.0.tar.gz && \
-    tar xf libuv-v1.18.0.tar.gz && \
-    cd libuv-v1.18.0 && \
+ENV LIBUV_VERSION 1.19.1
+RUN wget https://dist.libuv.org/dist/v${LIBUV_VERSION}/libuv-v${LIBUV_VERSION}.tar.gz && \
+    tar xf libuv-v${LIBUV_VERSION}.tar.gz && \
+    cd libuv-v${LIBUV_VERSION} && \
     ./autogen.sh && \
     ./configure && \
     make -j2 install
