@@ -13,14 +13,15 @@ RUN dpkg --add-architecture i386 && \
     libonig-dev libmaxminddb-dev libmbedtls-dev libpcre2-dev libjpeg-dev linux-headers-amd64 \
     libnl-3-dev ipvsadm libgmp-dev libnet1-dev libhiredis-dev libgles2-mesa-dev libunwind-dev \
     libcurl4-openssl-dev llvm-dev libsqlite3-dev libzstd-dev libmpg123-dev libnfnetlink-dev \
-    libgsl-dev liblua5.2-dev liblz4-dev unixodbc-dev libmsgpack-dev libmagick++-dev libcgroup-dev \
+    libgsl-dev liblua5.2-dev liblz4-dev unixodbc-dev libmsgpack-dev libcgroup-dev \
     libxml2-dev libyaml-dev libfltk1.3-dev libsodium-dev libpcap-dev libglfw3-dev libclang-dev \
     libgeoip-dev liblmdb-dev docker libunbound-dev libmariadb-dev libglib2.0-dev libpam0g-dev libv8-dev \
     libasan3 libmemcached-dev libmnl-dev libmecab-dev liblzma-dev libplplot-dev libargon2-0-dev \
     libmagic-dev libmariadbclient-dev libssl-dev libleveldb-dev libncurses5-dev liballegro5-dev \
     libczmq-dev chipmunk-dev libjansson-dev libevent-dev libsystemd-dev libaugeas-dev \
     python-dev cython libev-dev libc-ares-dev libjemalloc-dev python-setuptools \
-    redis-server gobjc ccache nano portaudio19-dev winehq-staging
+    redis-server gobjc ccache nano portaudio19-dev winehq-staging graphicsmagick-libmagick-dev-compat \
+    libwebp-dev
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 
 WORKDIR /root
