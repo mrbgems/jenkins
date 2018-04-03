@@ -51,7 +51,8 @@ services:
     command: |
       sh -c '
         sudo redis-server /etc/redis/redis.conf;
-        sudo redis-server --daemonize yes --port 6380 --requirepass secret;
+        sudo redis-server --daemonize yes --port 6380 --bind 127.0.0.1 --requirepass secret;
+        sudo service memcached start;
         jenkins-slave'
     volumes:
       - builder_home:/home/jenkins

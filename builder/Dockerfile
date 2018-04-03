@@ -21,7 +21,7 @@ RUN dpkg --add-architecture i386 && \
     libczmq-dev chipmunk-dev libjansson-dev libevent-dev libsystemd-dev libaugeas-dev \
     python-dev cython libev-dev libc-ares-dev libjemalloc-dev python-setuptools \
     redis-server gobjc ccache nano portaudio19-dev winehq-staging graphicsmagick-libmagick-dev-compat \
-    libwebp-dev lldb gdb libshp-dev libpq-dev locales
+    libwebp-dev lldb gdb libshp-dev libpq-dev locales memcached
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 RUN localedef -i en_US -f UTF-8 en_US.UTF-8
 
