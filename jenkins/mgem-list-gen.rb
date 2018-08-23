@@ -3,7 +3,7 @@ require 'rexml/document'
 require 'uri'
 
 BASE_GEM = 'master-mruby-marshal'
-MRUBY_RELEASES = %w[1.4.0 1.3.0 1.2.0 master]
+MRUBY_RELEASES = %w[1.4.1 1.4.0 1.3.0 1.2.0 master stable mruby2-draft]
 
 def base_url; ENV['MGEM_LIST_UPDATER_BASE'] end
 
@@ -11,7 +11,7 @@ def crumb
   `curl -s '#{base_url}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'`
 end
 
-downloader_base_xml_body = `curl '#{base_url}/job/release-downloader-master/config.xml'`
+downloader_base_xml_body = `curl -L '#{base_url}/job/release-downloader-master/config.xml'`
 MRUBY_RELEASES.each do |rel|
   next if rel == 'master'
   p "Configuring: release-downloader-#{rel}"
@@ -95,7 +95,7 @@ EOF
 
 tar xf $WORKSPACE/../release-downloader-#{rel}/mruby-#{rel}.tar.gz
 cd mruby-#{rel}
-MRUBY_CONFIG="$WORKSPACE/mgem_build_config.rb" script -e -c "./minirake all test" /dev/null
+MRUBY_CONFIG="$WORKSPACE/mgem_build_config.rb" script -e -c "./minirake #{rel == 'master' ? '-j2' : ''} all test" /dev/null
 EOS
     end
     File.open('./tmp.xml', 'w'){|f| config_xml.write(f) }
