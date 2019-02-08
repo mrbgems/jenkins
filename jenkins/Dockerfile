@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.155
+FROM jenkins/jenkins:2.163
 
 USER root
 RUN apt update && apt upgrade -y && apt install -y ruby
