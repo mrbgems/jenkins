@@ -3,7 +3,7 @@ require 'rexml/document'
 require 'uri'
 
 BASE_GEM = 'master-mruby-marshal'
-MRUBY_RELEASES = %w[1.4.1 1.4.0 1.3.0 1.2.0 master stable mruby2-draft]
+MRUBY_RELEASES = %w[2.0.0 1.4.1 1.4.0 1.3.0 1.2.0 master stable]
 
 def base_url; ENV['MGEM_LIST_UPDATER_BASE'] end
 
@@ -95,7 +95,7 @@ EOF
 
 tar xf $WORKSPACE/../release-downloader-#{rel}/mruby-#{rel}.tar.gz
 cd mruby-#{rel}
-MRUBY_CONFIG="$WORKSPACE/mgem_build_config.rb" script -e -c "./minirake #{rel == 'master' ? '-j2' : ''} all test" /dev/null
+MRUBY_CONFIG="$WORKSPACE/mgem_build_config.rb" script -e -c "./minirake -v #{rel == 'master' ? '-j2' : ''} all test" /dev/null
 EOS
     end
     File.open('./tmp.xml', 'w'){|f| config_xml.write(f) }
